@@ -1,5 +1,8 @@
 # EXPERIMENT-05-SOIL-MOISTURE-SENSOR-INTERFACE-TO-IOT-DEVELOPMENT-BOARD
 
+### Name : VAISHNAVIDEVI V
+### Register Number : 212223040230
+### Date : 15-05-2026
 ## Aim: 
 
 To Interface a Analog Input  (soil moisture sensor) to ARM IOT development board and write a  program to obtain  the data on the com port 
@@ -107,13 +110,56 @@ GND is the ground pin.
 
 
 ## STM 32 CUBE PROGRAM :
+```
+#include "main.h"
+#include "stdio.h"
+uint16_t readValue;
+
+ADC_HandleTypeDef hadc;
+
+UART_HandleTypeDef huart2;
 
 
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_ADC_Init(void);
+static void MX_USART2_UART_Init(void);
 
+
+int __io_putchar(int ch){
+	HAL_UART_Transmit(&huart2,(uint8_t*)&ch,1,0xFFFF);
+	return ch;
+}
+
+int main(void)
+{
+
+  HAL_Init();
+  SystemClock_Config();
+  MX_GPIO_Init();
+  MX_ADC_Init();
+  MX_USART2_UART_Init();
+
+  while (1)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc,HAL_MAX_DELAY);
+    readValue=HAL_ADC_GetValue(&hadc);
+    printf("Read value: %d\n",readValue);
+    uint32_t soilmoist_Percentage=100-(readValue/40.96);
+    printf("Soil moisture: %ld %%\n",soilmoist_Percentage);
+    HAL_Delay(2000);
+  }
+
+}
+
+```
 ## Output screen shots on serial monitor   :
- 
- 
- 
+
+ <img width="720" height="1599" alt="WhatsApp Image 2026-05-15 at 2 34 14 PM" src="https://github.com/user-attachments/assets/4d0978fa-d908-427c-8236-6449d0ba047d" />
+
+<img width="1600" height="900" alt="WhatsApp Image 2026-05-15 at 2 19 02 PM" src="https://github.com/user-attachments/assets/f0976ccf-b7d3-4ef7-b1c3-b5a8a144a1b5" />
+
  
 ## Result :
 Interfacing a Analog Input (soil moisture sensor) with ARM microcontroller based IOT development is executed and the results visualized on serial monitor 
